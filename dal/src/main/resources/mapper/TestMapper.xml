@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gupao.dal.dao.TestMapper">
+  <insert id="insert" parameterType="com.yangchen.mybatis.integrated.dao.Test" useGeneratedKeys="true" keyProperty="id">
+    insert into test (id, nums, name)
+    values (#{id,jdbcType=INTEGER}, #{nums,jdbcType=INTEGER},
+    #{name,jdbcType=VARCHAR, typeHandler=com.yangchen.mybatis.integrated.typehandlers.TestTypeHandler})
+  </insert>
+  <insert id="insertBatch" parameterType="list">
+    insert into test (id, nums, name)
+    values
+    <foreach collection="list" item="item" separator=",">
+    (#{item.id,jdbcType=INTEGER}, #{item.nums,jdbcType=INTEGER}, #{item.name,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
+
+  <sql id="Base_Column_List">
+    id, nums, name
+  </sql>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from test
+  </select>
+</mapper>
