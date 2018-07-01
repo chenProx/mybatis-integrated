@@ -1,4 +1,4 @@
-package com.yangchen.mybatis.integrated.typehandlers;
+package com.yangchen.mybatis.integrated.dal.typehandlers;
 
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;

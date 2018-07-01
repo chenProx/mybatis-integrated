@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yangchen.mybatis.integrated.dal.dao.BlogMapper">
+  <resultMap id="BaseResultMap" type="com.yangchen.mybatis.integrated.dal.dao.Blog">
+    <id column="bid" jdbcType="INTEGER" property="bid" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="author_id" jdbcType="INTEGER" property="authorId" />
+  </resultMap>
+
+  <!-- 嵌套查询 start  one to one-->
+  <resultMap id="blogResultMap" type="com.yangchen.mybatis.integrated.dal.resultmap.BlogResultMap">
+    <id column="bid" jdbcType="INTEGER" property="bid" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <association property="author" column="author_id"
+                 select="com.yangchen.mybatis.integrated.dal.dao.AuthorMapper.selectByPrimaryKey" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    bid, name, author_id
+  </sql>
+
+  <select id="selectBlogAuthor" resultMap="blogResultMap" parameterType="int">
+    select
+    <include refid="Base_Column_List" />
+    from blog
+    where bid = #{id,jdbcType=INTEGER}
+  </select>
+  <!-- 嵌套查询 end -->
+
+  <!-- 嵌套结果 start  one to one -->
+  <resultMap id="blogResultMap2" type="com.yangchen.mybatis.integrated.dal.resultmap.BlogResultMap">
+    <id column="bid" jdbcType="INTEGER" property="bid" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <association property="author" javaType="com.yangchen.mybatis.integrated.dal.dao.Author">
+      <id column="aid" jdbcType="INTEGER" property="aid" />
+      <result column="author_name" jdbcType="VARCHAR" property="authorName" />
+    </association>
+  </resultMap>
+
+  <select id="selectBlogAuthor2" resultMap="blogResultMap2" parameterType="int">
+    select
+    bid, name, author_id, author_name
+    from blog b,author a
+    where bid = #{id,jdbcType=INTEGER}
+    and
+    b.author_id = a.aid
+  </select>
+  <!-- 嵌套结果 end -->
+
+
+  <!-- 嵌套结果 start 1:N -->
+  <resultMap id="blogPostsResultMap2" type="com.yangchen.mybatis.integrated.dal.resultmap.BlogPostsResultMap">
+    <id column="bid" jdbcType="INTEGER" property="bid" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="author_id" jdbcType="INTEGER" property="authorId" />
+    <collection property="posts" ofType="com.yangchen.mybatis.integrated.dal.dao.Posts" >
+      <id column="pid" jdbcType="INTEGER" property="pid" />
+      <result column="post_name" jdbcType="VARCHAR" property="postName" />
+    </collection>
+  </resultMap>
+
+  <select id="selectBlogPosts2" resultMap="blogPostsResultMap2" parameterType="int">
+    select
+    *
+    from blog b,posts p
+    where b.bid = #{id,jdbcType=INTEGER}
+    and b.bid = p.blog_id
+  </select>
+  <!-- 嵌套结果 1:N end -->
+
+  <!-- 嵌套查询 1:N start -->
+  <resultMap id="blogPostsResultMap" type="com.yangchen.mybatis.integrated.dal.resultmap.BlogPostsResultMap">
+    <id column="bid" jdbcType="INTEGER" property="bid" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="author_id" jdbcType="INTEGER" property="authorId" />
+    <collection column="bid" property="posts"
+                select="selectByBlogId" ofType="com.yangchen.mybatis.integrated.dal.dao.Posts" >
+    </collection>
+  </resultMap>
+
+  <select id="selectByBlogId" parameterType="java.lang.Integer"
+                  resultType="com.yangchen.mybatis.integrated.dal.dao.Posts">
+    select
+    pid,post_name as postName,blog_id as blogId
+    from posts
+    where blog_id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectBlogPosts" resultMap="blogPostsResultMap" parameterType="int">
+    select
+    <include refid="Base_Column_List" />
+    from blog
+    where bid = #{id,jdbcType=INTEGER} order by bid asc
+  </select>
+
+  <select id="selectBlogPostsList" resultMap="blogPostsResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from blog
+    where bid > #{id,jdbcType=INTEGER}
+  </select>
+  <!-- 嵌套查询 1:N end -->
+</mapper>

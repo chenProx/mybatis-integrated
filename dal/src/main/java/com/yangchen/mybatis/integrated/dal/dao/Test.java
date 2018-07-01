@@ -1,4 +1,4 @@
-package com.yangchen.mybatis.integrated.dao;
+package com.yangchen.mybatis.integrated.dal.dao;
 
 import lombok.Data;
 

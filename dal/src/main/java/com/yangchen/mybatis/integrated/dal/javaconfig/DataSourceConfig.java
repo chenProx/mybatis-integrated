@@ -1,4 +1,4 @@
-package com.yangchen.mybatis.integrated.javaconfig;
+package com.yangchen.mybatis.integrated.dal.javaconfig;
 
 import com.alibaba.druid.filter.Filter;
 import com.alibaba.druid.filter.stat.StatFilter;
@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 import javax.sql.DataSource;
@@ -20,7 +21,8 @@ import java.util.Arrays;
  */
 @Configuration
 @ComponentScan("com.yangchen.mybatis.integrated")
-public class DataSoureConfig {
+@PropertySource("classpath:config/app.properties")
+public class DataSourceConfig {
     @Value("${jdbc.driverClassName}")
     private String driverClassName;
 

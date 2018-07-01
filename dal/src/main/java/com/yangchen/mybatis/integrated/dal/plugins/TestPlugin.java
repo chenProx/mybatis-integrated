@@ -1,4 +1,4 @@
-package com.yangchen.mybatis.integrated.plugins;
+package com.yangchen.mybatis.integrated.dal.plugins;
 
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;

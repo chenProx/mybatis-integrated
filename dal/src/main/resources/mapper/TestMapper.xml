@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gupao.dal.dao.TestMapper">
-  <insert id="insert" parameterType="com.yangchen.mybatis.integrated.dao.Test" useGeneratedKeys="true" keyProperty="id">
-    insert into test (id, nums, name)
+<mapper namespace="com.yangchen.mybatis.integrated.dal.dao.TestMapper">
+  <sql id="Base_Column_List">
+    id, nums, name
+  </sql>
+  <resultMap id="BaseResultMap" type="com.yangchen.mybatis.integrated.dal.dao.Test">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="nums" jdbcType="INTEGER" property="nums" />
+    <result column="name" jdbcType="VARCHAR" property="name"/>
+  </resultMap>
+  <insert id="insert" parameterType="com.yangchen.mybatis.integrated.dal.dao.Test" useGeneratedKeys="true" keyProperty="id">
+    insert into test (id, nums, `name`)
     values (#{id,jdbcType=INTEGER}, #{nums,jdbcType=INTEGER},
-    #{name,jdbcType=VARCHAR, typeHandler=com.yangchen.mybatis.integrated.typehandlers.TestTypeHandler})
+    #{name,jdbcType=VARCHAR})
   </insert>
   <insert id="insertBatch" parameterType="list">
     insert into test (id, nums, name)
@@ -13,10 +21,6 @@
     (#{item.id,jdbcType=INTEGER}, #{item.nums,jdbcType=INTEGER}, #{item.name,jdbcType=VARCHAR})
     </foreach>
   </insert>
-
-  <sql id="Base_Column_List">
-    id, nums, name
-  </sql>
   <select id="selectAll" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
